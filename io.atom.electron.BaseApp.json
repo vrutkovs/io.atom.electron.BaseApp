@@ -209,6 +209,17 @@
                     "dest-filename": "autogen.sh"
                 }
             ]
+        },
+        {
+            "name": "nodejs",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://nodejs.org/dist/v8.9.0/node-v8.9.0.tar.xz",
+                    "path": "node.tar.xz",
+                    "sha256": "ae8258f89e127a76d4b4aff6fdb8dc395b7da0069cba054b913dfc36b3c91189"
+                }
+            ]
         }
     ]
 }
