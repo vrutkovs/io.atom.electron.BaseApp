@@ -11,6 +11,7 @@ cache:
     - .travis-cache
 
 before_script:
+  - docker info
   - docker pull vrutkovs/flatpak
   - git clone -b gh-pages https://github.com/$TRAVIS_REPO_SLUG export/ && cp -rf export/repo . || mkdir export
 
