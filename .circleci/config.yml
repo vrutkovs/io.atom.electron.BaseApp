@@ -1,0 +1,36 @@
+version: 2
+jobs:
+  build:
+    working_directory: /app
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Clone existing export repo
+          command: |
+            git clone -b gh-pages https://github.com/vrutkovs/io.atom.electron.BaseApp export/ && cp -rf export/repo . || mkdir export
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /app/build-cache.tar
+      - run:
+          name: Unpack the cache
+          command: |
+            [[ -e /app/build-cache.tar ]] && tar -xf /app/build-cache.tar || true
+      - run:
+          name: Start the build
+          command: |
+            docker info
+            ls -la /app
+            docker run --privileged -v /app:/app -i vrutkovs/flatpak sh -c "ls -la /app && make -C /app"
+      - run:
+          name: Save the cache
+          command: |
+            tar --acls --xattrs -cf /caches/build-cache.tar .flatpak-builder
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/build-cache.tar
